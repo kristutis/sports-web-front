@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react'
+import FrontDoorCardsContainer from '../../../frontDoorCards/FrontDoorCardsContainer'
+import FrontDoorVideo from '../../frontDoorVideo/FrontDoorVideo'
 
 export default function Home() {
     const [trainers, setTrainers] = useState([])
@@ -12,7 +14,8 @@ export default function Home() {
 
     return (
         <div>
-            <h1>hello</h1>
+            <FrontDoorVideo/>
+            <FrontDoorCardsContainer/>
             {trainers.map(trainer => {
                 return <h1>{trainer.moto}</h1>
             })}
