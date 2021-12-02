@@ -1,14 +1,20 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import Button from '../button/Button'
+import Modal from '../modal/Modal'
 import './Navbar.css'
 
 function Navbar() {
+    const [loginModal, setLoginModal] = useState(false)
     const [clicked, setClicked] = useState(false)
     const [button, setButton] = useState(true)
 
     const handleClick = () => setClicked(!clicked)
     const closeMobileMenu = () => setClicked(false)
+    const loginClicked = () => {
+        closeMobileMenu()
+        setLoginModal(true)
+    }
 
     const showButton = () => {
         if (window.innerWidth <= 960) {
@@ -52,9 +58,9 @@ function Navbar() {
                             </Link>
                         </li>
                         <li className='nav-item'>
-                            <Link to='/log-in' className='nav-links' onClick={closeMobileMenu}>
+                            <p className='nav-links' onClick={loginClicked}>
                                 Log in
-                            </Link>
+                            </p>
                         </li>
                         {clicked && <li className='nav-item'>
                             <Link to='/sign-up' className='nav-links-mobile' onClick={closeMobileMenu}>
@@ -67,6 +73,7 @@ function Navbar() {
                     }
                 </div>
             </nav>
+            <Modal loginModal={loginModal} setLoginModal={setLoginModal}/>
         </>
     )
 }
