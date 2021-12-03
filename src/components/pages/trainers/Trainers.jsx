@@ -18,7 +18,7 @@ export default function Trainers() {
                         src: trainerPhoto,
                         text: trainer.moto,
                         label: trainer.name,
-                        path: trainer.id,
+                        path: '/trainers/' + trainer.id,
                     }
                 })
                 setTrainers(trainerData)
