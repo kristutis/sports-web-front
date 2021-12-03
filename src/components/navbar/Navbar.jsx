@@ -6,14 +6,20 @@ import './Navbar.css'
 
 function Navbar() {
     const [loginModal, setLoginModal] = useState(false)
+    const [signupModal, setSignupModal] = useState(false)
     const [clicked, setClicked] = useState(false)
     const [button, setButton] = useState(true)
 
     const handleClick = () => setClicked(!clicked)
     const closeMobileMenu = () => setClicked(false)
+
     const loginClicked = () => {
         closeMobileMenu()
         setLoginModal(true)
+    }
+    const signupClicked = () => {
+        closeMobileMenu()
+        setSignupModal(true)
     }
 
     const showButton = () => {
@@ -63,17 +69,17 @@ function Navbar() {
                             </p>
                         </li>
                         {clicked && <li className='nav-item'>
-                            <Link to='/sign-up' className='nav-links-mobile' onClick={closeMobileMenu}>
+                            <p className='nav-links-mobile' onClick={signupClicked}>
                                 SIGN UP
-                            </Link>
+                            </p>
                         </li>}
                     </ul>
                     {button && 
-                        <Button buttonStyle='btn--outline'>SIGN UP</Button>
+                        <Button buttonStyle='btn--outline' onClick={signupClicked}>SIGN UP</Button>
                     }
                 </div>
             </nav>
-            <Modal loginModal={loginModal} setLoginModal={setLoginModal}/>
+            <Modal loginModal={loginModal} setLoginModal={setLoginModal} signupModal={signupModal} setSignupModal={setSignupModal}/>
         </>
     )
 }
