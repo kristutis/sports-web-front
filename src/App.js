@@ -6,6 +6,8 @@ import Trainers from './components/pages/trainers/Trainers';
 import Footer from './components/footer/Footer'
 import './App.css'
 
+export const DEFAULT_BACKEND_PATH = 'http://localhost:3000/api/'
+
 function App() {
   return (
     <div className='App'>

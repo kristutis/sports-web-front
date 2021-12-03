@@ -103,6 +103,10 @@ h1 {
   .content__blog__container {
     width: 84%;
   }
+
+  .cards__item__text {
+    width: 300px;
+  }
 }
 
 @media only screen and (min-width: 1024px) {
