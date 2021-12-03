@@ -4,7 +4,6 @@ import "./Modal.css";
 import SignupModal from "./SignupModal";
 
 export default function Modal(props) {
-  console.log(props)
   const toggleModal = () => {
     props.setLoginModal(false)
     props.setSignupModal(false)

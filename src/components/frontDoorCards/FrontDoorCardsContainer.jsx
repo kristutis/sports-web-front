@@ -49,7 +49,7 @@ function frontDoorCards(data) {
 }
 
 function col3Cards(data) {
-  const dataChunks = chunks(data, 3);
+  const dataChunks = chunks(data, data.length % 2 == 0 ? 2 : 3);
 
   return (
     dataChunks.map(dataChunk => {

@@ -6,17 +6,8 @@ import './Trainers.css'
 const trainerPhoto = 'https://images.squarespace-cdn.com/content/v1/534b1517e4b0b2883888bafe/1565890017595-AC8HP5XWLOOHRS1FX0FW/Personal-Trainer-in-Chicago.jpg?format=1500w'
 const title = 'Check out our trainers!'
 
-// const cardsData = Array(5).fill(
-//     {
-//         src: 'https://urec.uark.edu/_resources/images/fitness_wellness/personal-trainer-1-compressor.jpg',
-//         text: 'Explore our new deals from only $20',
-//         label: '50% off!',
-//         path: '/services',
-//     }
-// )
-
 export default function Trainers() {
-    const [trainers, setTrainers] = useState([])
+    const [trainers, setTrainers] = useState(null)
 
     useEffect(() => {
         fetch(DEFAULT_BACKEND_PATH + 'trainers')
@@ -27,7 +18,7 @@ export default function Trainers() {
                         src: trainerPhoto,
                         text: trainer.moto,
                         label: trainer.name,
-                        path: '/services',
+                        path: trainer.id,
                     }
                 })
                 setTrainers(trainerData)
@@ -35,12 +26,10 @@ export default function Trainers() {
             .catch(e => console.log(e))
     }, [])
 
-    console.log(trainers)
-
     return (
         <>
             <h1 className='default-page-front trainers'>TRAINERS</h1>
-            <FrontDoorCardsContainer data={trainers} placement={CARDS_PLACEMENT[1]} title={title}/>
+            {!!trainers && <FrontDoorCardsContainer data={trainers} placement={CARDS_PLACEMENT[1]} title={title}/>}
         </>
     )
 }
