@@ -10,21 +10,30 @@ function SignupModal() {
     const [name, setName] = useState('');
     const [surname, setSurname] = useState('');
 
-    function registerUser() {
-        if (name === '') {
+    function signupClicked(e) {
+        e.preventDefault()
+        if (!name) {
             alert("Name field must not be empty!");
             return;
         }
-        if (surname === '') {
+        if (!surname) {
             alert("Surname field must not be empty!");
             return;
         }
-        if (email === '') {
+        if (!email) {
             alert("Email field must not be empty!");
             return;
         }
-        if (password === '') {
+        if (!password) {
             alert("Password field must not be empty!");
+            return;
+        }
+        if (password.length < 6) {
+            alert("Password length must be longer than 6 symbols!");
+            return;
+        }
+        if (!termsAndConditions) {
+            alert("You must accept our terms and contitions!");
             return;
         }
         const user = {
@@ -60,10 +69,10 @@ function SignupModal() {
         <div className="login">
             <h1>Register to Gym App</h1>
                 <form method="post" action="">
-                    <p><input type="text" placeholder="Name"/></p>
-                    <p><input type="text" name="login" placeholder="Surname"/></p>
-                    <p><input type="email" name="login" placeholder="Email"/></p>
-                    <p><input type="password" name="password"  placeholder="Password"/></p>
+                    <p><input type="text" placeholder="Name" onChange={e => setName(e.target.value)}/></p>
+                    <p><input type="text" name="login" placeholder="Surname" onChange={e => setSurname(e.target.value)}/></p>
+                    <p><input type="email" name="login" placeholder="Email" onChange={e => setEmail(e.target.value)}/></p>
+                    <p><input type="password" name="password"  placeholder="Password" onChange={e => setPassword(e.target.value)}/></p>
                     <p className="remember_me">
                     </p>
                     <p className="remember_me">
@@ -72,7 +81,7 @@ function SignupModal() {
                             I aggre to the Gym's term & conditions
                         </label>
                     </p>
-                    <p className="submit"><input type="submit" name="commit" value="Register" onClick={(e) => e.preventDefault()}/></p>
+                    <p className="submit"><input type="submit" name="commit" value="Register" onClick={(e) => signupClicked(e)}/></p>
                 </form>
         </div>
     )

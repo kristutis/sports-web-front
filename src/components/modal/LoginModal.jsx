@@ -1,7 +1,10 @@
-import React from 'react'
+import React, {useState} from 'react'
 import './LoginModal.css'
 
 function LoginModal() {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+
     return (
         <>
             <div className="login">
