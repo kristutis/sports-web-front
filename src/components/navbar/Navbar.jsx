@@ -15,10 +15,12 @@ function Navbar() {
 
     const loginClicked = () => {
         closeMobileMenu()
+        setSignupModal(false)
         setLoginModal(true)
     }
     const signupClicked = () => {
         closeMobileMenu()
+        setLoginModal(false)
         setSignupModal(true)
     }
 
