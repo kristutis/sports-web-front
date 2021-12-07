@@ -8,8 +8,10 @@
         const params = useParams();
         const trainerId = params.id
 
-        const isLoggedIn = useSelector(state => !!state && !!state.user)
+        const tokenData = useSelector(state => state && state.user)
+        const isLoggedIn = !!tokenData
 
+        const [ratingUpdated, setRatingUpdated] = useState(false)
         const [newRating, setNewRating] = useState(0)
         const [trainer, setTrainer] = useState(null)
         const [ratings, setRatings] = useState(null)
@@ -20,7 +22,23 @@
             if (!newRating) {
                 alert('Please select a rating!')
             }
-            console.log(newRating)
+
+            fetch(DEFAULT_BACKEND_PATH + 'trainers/' + trainerId + '/ratings', {
+                method: 'POST',
+                headers: {
+                    'Authorization': tokenData.tokenType + ' ' + tokenData.accessToken,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    'rating': newRating
+                })
+            })
+                // .then(response => console.log(response))
+                .catch(e => console.log(e))
+
+            alert('Trainer rating updated!')
+            setRatingUpdated(!ratingUpdated)
+            // window.location.reload()
         }
 
         useEffect(() => {
@@ -62,7 +80,7 @@
                     setratingAverage(average)
                 )
                 .catch(e => console.log(e))
-        }, [])
+        }, [ratingUpdated])
 
         if (ratingAverage) {
             trainer.ratingAverage = ratingAverage
