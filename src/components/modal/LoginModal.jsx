@@ -42,7 +42,8 @@ function LoginModal() {
                     alert('Successfully logged in!');
                     window.location.reload()
                 }
-            });
+            })
+            .catch(e => console.log(e));
     }
 
     return (
