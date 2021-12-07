@@ -20,8 +20,8 @@ export default function Modal(props) {
   return (
     <>
       {modalOpened && (
-        <div className="modal">
-          <div onClick={toggleModal} className="overlay"></div>
+        <div className="modal-form">
+          <div onClick={toggleModal} className="overlay-modal-form"></div>
           <div className="modal-content">
             <h2>Please fill out form</h2>
             {props.loginModal && <LoginModal/>}

@@ -48,7 +48,7 @@ function LoginModal() {
 
     return (
         <>
-            <div className="login">
+            <div className="login-modal-form">
                 <h1>Login to Gym App</h1>
                     <form >
                         <p><input type="email" placeholder="Email" onChange={e => setEmail(e.target.value)}/></p>
@@ -59,7 +59,7 @@ function LoginModal() {
                             Remember me on this computer
                         </label>
                         </p>
-                        <p className="submit"><input type="submit" value="Login" onClick={(e) => loginClicked(e)}/></p>
+                        <p className="submit-modal-form"><input type="submit" value="Login" onClick={(e) => loginClicked(e)}/></p>
                     </form>
             </div>
         </>

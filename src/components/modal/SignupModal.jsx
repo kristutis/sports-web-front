@@ -69,7 +69,7 @@ function SignupModal() {
     }
 
     return (
-        <div className="login">
+        <div className="login-modal-form">
             <h1>Register to Gym App</h1>
                 <form method="post" action="">
                     <p><input type="text" placeholder="Name" onChange={e => setName(e.target.value)}/></p>
@@ -77,14 +77,12 @@ function SignupModal() {
                     <p><input type="email" name="login" placeholder="Email" onChange={e => setEmail(e.target.value)}/></p>
                     <p><input type="password" name="password"  placeholder="Password" onChange={e => setPassword(e.target.value)}/></p>
                     <p className="remember_me">
-                    </p>
-                    <p className="remember_me">
                         <label>
                             <input type="checkbox" name="remember_me" id="remember_me" onClick={() => setTermsAndConditions(!termsAndConditions)}/>
                             I aggre to the Gym's term & conditions
                         </label>
                     </p>
-                    <p className="submit"><input type="submit" name="commit" value="Register" onClick={(e) => signupClicked(e)}/></p>
+                    <p className="submit-modal-form"><input type="submit" name="commit" value="Register" onClick={(e) => signupClicked(e)}/></p>
                 </form>
         </div>
     )
