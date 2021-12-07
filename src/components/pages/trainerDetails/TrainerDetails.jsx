@@ -3,7 +3,6 @@ import { useParams } from "react-router-dom";
 import { DEFAULT_BACKEND_PATH } from '../../../App';
 
 function TrainerDetails() {
-    console.log('hello')
     const params = useParams();
     const trainerId = params.id
 

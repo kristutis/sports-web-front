@@ -1,14 +1,15 @@
 import React, {useState} from 'react'
+import { login, logout } from '../../state/actions/userActions';
+import store from '../../state/state';
 import './LoginModal.css'
 
 function SignupModal() {
     const [termsAndConditions, setTermsAndConditions] = useState(false)
 
-    // const dispatch = useDispatch();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [name, setName] = useState('');
-    const [surname, setSurname] = useState('');
+    const [surname, setSurname] = useState('');    
 
     function signupClicked(e) {
         e.preventDefault()
@@ -42,7 +43,9 @@ function SignupModal() {
             name: name,
             surname: surname,
         }
-        // console.log(user);
+
+        // store.dispatch()
+
         // fetch("https://sportsconnectedback.azurewebsites.net/api/users/add",
         //     {
         //         method: 'POST',

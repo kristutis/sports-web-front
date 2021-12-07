@@ -7,23 +7,27 @@ import Footer from './components/footer/Footer'
 import './App.css'
 import Products from './components/pages/products/Products';
 import TrainerDetails from './components/pages/trainerDetails/TrainerDetails';
+import { Provider } from 'react-redux';
+import store from './state/state';
 
 export const DEFAULT_BACKEND_PATH = 'http://localhost:3000/api/'
 
 function App() {
   return (
-    <div className='App'>
-      <Router>
-        <Navbar/>
-        <Switch>
-          <Route path='/' exact component={Home}/>
-          <Route path='/trainers' exact component={Trainers}/>
-          <Route path='/trainers/:id' exact component={TrainerDetails}/>
-          <Route path='/products' exact component={Products}/>
-        </Switch>
-        <Footer/>
-      </Router>
-    </div>
+    <Provider store={store}>
+      <div className='App'>
+        <Router>
+          <Navbar/>
+          <Switch>
+            <Route path='/' exact component={Home}/>
+            <Route path='/trainers' exact component={Trainers}/>
+            <Route path='/trainers/:id' exact component={TrainerDetails}/>
+            <Route path='/products' exact component={Products}/>
+          </Switch>
+          <Footer/>
+        </Router>
+      </div>
+    </Provider>
   );
 }
 

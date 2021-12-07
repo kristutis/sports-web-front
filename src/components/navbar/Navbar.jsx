@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from 'react'
+import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
+import { login, logout } from '../../state/actions/userActions'
+import store from '../../state/state'
 import Button from '../button/Button'
 import Modal from '../modal/Modal'
 import './Navbar.css'
 
 function Navbar() {
+    const isLoggedin = useSelector(state => !!state && !!state.user);
+
     const [loginModal, setLoginModal] = useState(false)
     const [signupModal, setSignupModal] = useState(false)
     const [clicked, setClicked] = useState(false)
@@ -22,6 +27,11 @@ function Navbar() {
         closeMobileMenu()
         setLoginModal(false)
         setSignupModal(true)
+    }
+    const logoutClicked = () => {
+        closeMobileMenu()
+        store.dispatch(logout())
+        alert('Successfully logged out!')
     }
 
     const showButton = () => {
@@ -65,25 +75,50 @@ function Navbar() {
                                 Products
                             </Link>
                         </li>
-                        <li className='nav-item'>
+                        {!isLoggedin && <li className='nav-item'>
                             <p className='nav-links' onClick={loginClicked}>
                                 Log in
                             </p>
-                        </li>
-                        {clicked && <li className='nav-item'>
+                        </li>}
+                        {clicked && !isLoggedin && <li className='nav-item'>
                             <p className='nav-links-mobile' onClick={signupClicked}>
                                 SIGN UP
                             </p>
                         </li>}
+                        {clicked && isLoggedin && <li className='nav-item'>
+                            <p className='nav-links-mobile' onClick={logoutClicked}>
+                                LOG OUT
+                            </p>
+                        </li>}
                     </ul>
-                    {button && 
+                    {button && !isLoggedin &&
                         <Button buttonStyle='btn--outline' onClick={signupClicked}>SIGN UP</Button>
+                    }
+                    {button && isLoggedin &&
+                        <Button buttonStyle='btn--outline' onClick={logoutClicked}>LOG OUT</Button>
                     }
                 </div>
             </nav>
             <Modal loginModal={loginModal} setLoginModal={setLoginModal} signupModal={signupModal} setSignupModal={setSignupModal}/>
         </>
     )
+}
+
+function GuestButtons(clicked, loginClicked, signupClicked) {
+    return (
+        <>
+            <li className='nav-item'>
+                <p className='nav-links' onClick={loginClicked}>
+                    Log in
+                </p>
+            </li>
+            {clicked && <li className='nav-item'>
+                <p className='nav-links-mobile' onClick={signupClicked}>
+                    SIGN UP
+                </p>
+            </li>}
+        </>
+    )    
 }
 
 export default Navbar
