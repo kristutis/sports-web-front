@@ -50,8 +50,6 @@ function SignupModal() {
         fetch(DEFAULT_BACKEND_PATH + 'users/signup', {
             method: 'POST',
             headers: {
-                'Access-Control-Allow-Origin': '*',
-                'Access-Control-Request-Method': 'POST',
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(user)
