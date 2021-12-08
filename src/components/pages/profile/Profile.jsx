@@ -81,6 +81,7 @@ function Profile() {
             .then(response => {
                 if (response.status == 200) {
                     alert('Updated successfully!')
+                    setUserUpdated(!userUpdated)
                     return
                 }
                 if (response.status == 400) {
