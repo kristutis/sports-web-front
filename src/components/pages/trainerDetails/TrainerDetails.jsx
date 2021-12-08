@@ -11,6 +11,7 @@
         const tokenData = useSelector(state => state && state.user)
         const isLoggedIn = !!tokenData
 
+        const [newComment, setNewComment] = useState(null)
         const [ratingUpdated, setRatingUpdated] = useState(false)
         const [newRating, setNewRating] = useState(0)
         const [trainer, setTrainer] = useState(null)
@@ -18,9 +19,32 @@
         const [ratingAverage, setratingAverage] = useState(null)
         const [comments, setComments] = useState(null)
 
+        const handleNewComment = () => {
+            if (!newComment) {
+                alert('Please fill the comment form!')
+                return
+            }
+
+            fetch(DEFAULT_BACKEND_PATH + 'trainers/' + trainerId + '/comments', {
+                method: 'POST',
+                headers: {
+                    'Authorization': tokenData.tokenType + ' ' + tokenData.accessToken,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    'comment': newComment
+                })
+            })
+                .catch(e => console.log(e))
+
+            alert('New comment posted!')
+            setRatingUpdated(!ratingUpdated)
+        }
+
         const postComment = () => {
             if (!newRating) {
                 alert('Please select a rating!')
+                return
             }
 
             fetch(DEFAULT_BACKEND_PATH + 'trainers/' + trainerId + '/ratings', {
@@ -33,12 +57,10 @@
                     'rating': newRating
                 })
             })
-                // .then(response => console.log(response))
                 .catch(e => console.log(e))
 
             alert('Trainer rating updated!')
             setRatingUpdated(!ratingUpdated)
-            // window.location.reload()
         }
 
         useEffect(() => {
@@ -90,9 +112,11 @@
             <>
                 {!!trainer && <TrainerInfo props={trainer}/>}   
                 <br></br>
+                {isLoggedIn && <RateModule setNewRating={setNewRating} postComment={postComment}/>}
+                <br></br>
                 {!!comments && !!comments.length ? <CommentsTable props={comments}/> : <NoCommentsSection/>}
                 <br></br>
-                {isLoggedIn && <RateModule setNewRating={setNewRating} postComment={postComment}/>}
+                {isLoggedIn && <NewCommentModule setNewComment={setNewComment} handleNewComment={handleNewComment}/>}
             </>
         )
     }
@@ -217,6 +241,22 @@
                     <button type="button" class="btn btn-secondary" onClick={() => postComment()}>Rate!</button>
                 </div>
             </div>
+        )
+    }
+
+    function NewCommentModule({setNewComment, handleNewComment}) {
+        return (
+            <>
+                <p class='d-flex justify-content-center'>
+                        Leave your opinion!
+                </p>
+                <div class='d-flex justify-content-center'>
+                    <div class="form-check form-check-inline">
+                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="4" onChange={(e) => setNewComment(e.target.value)}></textarea>
+                        <button type="button" class="btn btn-secondary" onClick={() => handleNewComment()}>Post Comment!</button>
+                    </div>
+                </div>
+            </>
         )
     }
 
