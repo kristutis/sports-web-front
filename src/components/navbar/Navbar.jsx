@@ -35,6 +35,7 @@ function Navbar() {
         closeMobileMenu()
         store.dispatch(logout())
         alert('Successfully logged out!')
+        window.location.reload()
     }
 
     const showButton = () => {

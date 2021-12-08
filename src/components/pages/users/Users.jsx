@@ -7,6 +7,7 @@ function Users() {
 
     const [isAdmin, setIsAdmin] = useState(false)
     const [users, setUsers] = useState(null)
+    const [userDeleted, setUserDeleted] = useState(false)
 
     const handleDelete = (id) => {
         fetch(DEFAULT_BACKEND_PATH + 'users/' + id, {
@@ -17,6 +18,7 @@ function Users() {
             },
         })
             .then(response => {
+                setUserDeleted(!userDeleted)
                 if (response.status == 404) {
                     alert('User not found!')
                     return
@@ -53,7 +55,7 @@ function Users() {
                 setUsers(users)
             })
             .catch(e => console.log(e))
-    }, [])
+    }, [userDeleted])
 
     if (!isAdmin) {
         return (

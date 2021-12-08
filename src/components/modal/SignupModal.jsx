@@ -1,6 +1,5 @@
 import React, {useState} from 'react'
-import { login, logout } from '../../state/actions/userActions';
-import store from '../../state/state';
+import { DEFAULT_BACKEND_PATH } from '../../App';
 import './LoginModal.css'
 
 function SignupModal() {
@@ -25,6 +24,10 @@ function SignupModal() {
             alert("Email field must not be empty!");
             return;
         }
+        if (!email.includes('@') || !email.includes('.')) {
+            alert("Wrong email address!");
+            return;
+        }
         if (!password) {
             alert("Password field must not be empty!");
             return;
@@ -44,28 +47,29 @@ function SignupModal() {
             surname: surname,
         }
 
-        // store.dispatch()
-
-        // fetch("https://sportsconnectedback.azurewebsites.net/api/users/add",
-        //     {
-        //         method: 'POST',
-        //         headers: {
-        //             'Content-Type': 'application/json'
-        //         },
-        //         body: JSON.stringify(user)
-        //     }
-        // )
-        //     .then(res => res.json())
-        //     .then(a => {
-        //         if (a.error === false) {
-        //             alert(a.message);
-        //             props.onModalClick();
-        //         } else {
-        //             alert(a.message);
-        //             dispatch(setError(a.message));
-        //             props.onAlertClick();
-        //         }
-        //     });
+        fetch(DEFAULT_BACKEND_PATH + 'users/signup', {
+            method: 'POST',
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Request-Method': 'POST',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(user)
+        })
+            .then(response => {
+                console.log('asdf')
+                if (response.status == 201) {
+                    alert('User ' + name + ' created!')
+                    window.location.reload()
+                    return
+                }
+                if (response.status == 400) {
+                    alert('User already exists!')
+                    return
+                }
+                alert(response.status)  
+            })
+            .catch(e => console.log(e))
     }
 
     return (
