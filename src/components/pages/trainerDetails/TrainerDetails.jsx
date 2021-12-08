@@ -177,14 +177,17 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <th scope="row">DateTime</th>
+                                <th scope="row">Date</th>
                                 <th scope="row">Comment</th>
                             </tr>
                             {props.map(comment => {
+                                const time = comment.date.split('T')
+                                const secondTimePart = time[1].split('.000Z')
+                                const date = time[0] + ' ' + secondTimePart[0]
                                 return (
                                     <>
                                         <tr>
-                                            <td>{comment.date}</td>
+                                            <td>{date}</td>
                                             <td>{comment.comment}</td>
                                         </tr>
                                     </>
