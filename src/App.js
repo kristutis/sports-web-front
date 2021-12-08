@@ -10,6 +10,7 @@ import TrainerDetails from './components/pages/trainerDetails/TrainerDetails';
 import { Provider } from 'react-redux';
 import store from './state/state';
 import Users from './components/pages/users/Users';
+import Profile from './components/pages/profile/Profile';
 
 export const DEFAULT_BACKEND_PATH = 'http://localhost:3000/api/'
 
@@ -25,6 +26,7 @@ function App() {
             <Route path='/trainers/:id' exact component={TrainerDetails}/>
             <Route path='/products' exact component={Products}/>
             <Route path='/users' exact component={Users}/>
+            <Route path='/profile' exact component={Profile}/>
           </Switch>
           <Footer/>
         </Router>

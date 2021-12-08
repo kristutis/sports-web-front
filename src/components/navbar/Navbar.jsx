@@ -101,6 +101,11 @@ function Navbar() {
                                 Products
                             </Link>
                         </li>
+                        {isLoggedin && <li className='nav-item'>
+                            <Link to='/profile' className='nav-links' onClick={closeMobileMenu}>
+                                Profile
+                            </Link>
+                        </li>}
                         {!isLoggedin && <li className='nav-item'>
                             <p className='nav-links' onClick={loginClicked}>
                                 Log in
