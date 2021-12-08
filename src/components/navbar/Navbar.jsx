@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
+import { DEFAULT_BACKEND_PATH } from '../../App'
 import { login, logout } from '../../state/actions/userActions'
 import store from '../../state/state'
 import Button from '../button/Button'
@@ -8,8 +9,10 @@ import Modal from '../modal/Modal'
 import './Navbar.css'
 
 function Navbar() {
-    const isLoggedin = useSelector(state => !!state && !!state.user);
+    const tokenData = useSelector(state => state && state.user)
+    const isLoggedin = !!tokenData  
 
+    const [isAdmin, setIsAdmin] = useState(false)
     const [loginModal, setLoginModal] = useState(false)
     const [signupModal, setSignupModal] = useState(false)
     const [clicked, setClicked] = useState(false)
@@ -46,6 +49,23 @@ function Navbar() {
 
     useEffect(() => {
         showButton()
+
+        if (!isLoggedin) {
+            return
+        }
+
+        fetch(DEFAULT_BACKEND_PATH + 'users/details', {
+            method: 'GET',
+            headers: {
+                'Authorization': tokenData.tokenType + ' ' + tokenData.accessToken,
+                'Content-Type': 'application/json',
+            },
+        })
+            .then(response => response.json())
+            .then(res => {
+                setIsAdmin(res.role == 255)
+            })
+            .catch(e => console.log(e))
     }, [])
 
     return (
@@ -65,6 +85,11 @@ function Navbar() {
                                 Home
                             </Link>
                         </li>
+                        {isAdmin && <li className='nav-item'>
+                            <Link to='/users' className='nav-links' onClick={closeMobileMenu}>
+                                Users
+                            </Link>
+                        </li>}
                         <li className='nav-item'>
                             <Link to='/trainers' className='nav-links' onClick={closeMobileMenu}>
                                 Trainers
