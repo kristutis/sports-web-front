@@ -112,7 +112,6 @@ function Profile() {
             <div class="row justify-content-center">
                 <div class="col-auto">
                     <br></br>
-                    {/* <h3>{user.name + ' ' + user.surname}</h3> */}
                     <table class="table table-dark">
                         <thead class="thead">
                             <tr>

@@ -92,7 +92,7 @@ function Navbar() {
                             </Link>
                         </li>}
                         <li className='nav-item'>
-                            <Link to='/trainers' className='nav-links' onClick={closeMobileMenu}>
+                            <Link to={isAdmin ? '/edit-trainers' : '/trainers'} className='nav-links' onClick={closeMobileMenu}>
                                 Trainers
                             </Link>
                         </li>
