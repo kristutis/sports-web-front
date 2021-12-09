@@ -101,7 +101,7 @@ function TrainerRow({ trainer, handleDelete }) {
             <th scope="row">{trainer.id}</th>
             <td>{trainer.name}</td>
             <td>{trainer.surname}</td>
-            <td>{trainer.desription}</td>
+            <td>{trainer.description}</td>
             <td>{trainer.moto}</td>
             <td>{trainer.price}</td>
             <td>
