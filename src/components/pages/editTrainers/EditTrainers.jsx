@@ -9,28 +9,28 @@ function EditTrainers() {
 
     const [isAdmin, setIsAdmin] = useState(false)
     const [trainers, setTrainers] = useState(null)
+    const [trainerDeleted, setTrainerDeleted] = useState(false)
 
     const handleDelete = (id) => {
-        // fetch(DEFAULT_BACKEND_PATH + 'users/' + id, {
-        //     method: 'DELETE',
-        //     headers: {
-        //         'Authorization': tokenData.tokenType + ' ' + tokenData.accessToken,
-        //         'Content-Type': 'application/json',
-        //     },
-        // })
-        //     .then(response => {
-        //         setUserDeleted(!userDeleted)
-        //         if (response.status == 404) {
-        //             alert('User not found!')
-        //             return
-        //         }
-        //         if (response.status == 204) {
-        //             alert('User deleted!')
-        //             return
-        //         }
-        //         alert(response.status)
-        //     })
-        //     .catch(e => console.log(e))
+        fetch(DEFAULT_BACKEND_PATH + 'trainers/' + id, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': tokenData.tokenType + ' ' + tokenData.accessToken,
+            },
+        })
+            .then(response => {
+                if (response.status == 404) {
+                    alert('Trainer not found!')
+                    return
+                }
+                if (response.status == 204) {
+                    alert('Trainer deleted!')
+                    setTrainerDeleted(!trainerDeleted)
+                    return
+                }
+                alert(response.status)
+            })
+            .catch(e => console.log(e))
     }
 
     useEffect(() => {
@@ -57,15 +57,13 @@ function EditTrainers() {
                 setTrainers(trainerData)
             })
             .catch(e => console.log(e))
-    }, [])
+    }, [trainerDeleted])
 
     if (!isAdmin) {
         return (
             <p>You do not have permission to view this page</p>
         )
     }
-
-    console.log(trainers)
 
     return (
         <>
