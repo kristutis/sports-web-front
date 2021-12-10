@@ -91,6 +91,20 @@ function TrainerDetails() {
         setRatingUpdated(!ratingUpdated)
     }
 
+    const ratedAlready = () => {
+        if (!ratings || !userId) {
+            return false
+        }
+        let rated = false
+        ratings.forEach(rating => {
+            if (rating.fk_user_id == userId) {
+                rated = true
+                return
+            }
+        })
+        return rated
+    }
+
     useEffect(() => {
         fetch(DEFAULT_BACKEND_PATH + 'trainers/' + trainerId)
             .then(response => response.json())
@@ -109,18 +123,7 @@ function TrainerDetails() {
         fetch(DEFAULT_BACKEND_PATH + 'trainers/' + trainerId + '/ratings')
             .then(response => response.json())
             .then(ratingsArray => {
-                const comms = ratingsArray.map(rating => {
-                    return (
-                        <ul>
-                            {Object.values(rating).map(value => {
-                                return (
-                                    <li>{value}</li>
-                                )
-                            })}
-                        </ul>
-                    )
-                })
-                setRatings(comms)
+                setRatings(ratingsArray)
             })
             .catch(e => console.log(e))
 
@@ -140,13 +143,13 @@ function TrainerDetails() {
         <>
             {!!trainer && <TrainerInfo props={trainer} />}
             <br></br>
-            {isLoggedIn && <RateModule setNewRating={setNewRating} postComment={postComment} />}
+            {isLoggedIn && <RateModule setNewRating={setNewRating} postComment={postComment} trainerId={ratedAlready() ? trainerId : null} setRatingUpdated={setRatingUpdated}/>}
             <br></br>
-            {!!comments && !!comments.length ? <CommentsTable props={comments} setRatingUpdated={setRatingUpdated} setShowEditModule={setShowEditModule} userId={userId}/> : <NoCommentsSection />}
+            {!!comments && !!comments.length ? <CommentsTable props={comments} setRatingUpdated={setRatingUpdated} setShowEditModule={setShowEditModule} userId={userId} /> : <NoCommentsSection />}
             <br></br>
             {isLoggedIn && <NewCommentModule setNewComment={setNewComment} handleNewComment={handleNewComment} commentAreaValue={newComment} />}
             <br></br>
-            {!!showEditModule && <EditCommentModule commentId={showEditModule} setShowEditModule={setShowEditModule} setRatingUpdated={setRatingUpdated}/>}
+            {!!showEditModule && <EditCommentModule commentId={showEditModule} setShowEditModule={setShowEditModule} setRatingUpdated={setRatingUpdated} />}
         </>
     )
 }
@@ -221,8 +224,8 @@ function CommentsTable({ props, setRatingUpdated, setShowEditModule, userId }) {
                                         <td className='flex-comments'>
                                             {comment.comment}
                                             <div>
-                                                <EditCommentButton creatorId={comment.fk_user_id} commentId={comment.id} setShowEditModule={setShowEditModule} userId={userId}/>
-                                                <DeleteCommentButton id={comment.fk_user_id} commentId={comment.id} setRatingUpdated={setRatingUpdated} userId={userId}/>
+                                                <EditCommentButton creatorId={comment.fk_user_id} commentId={comment.id} setShowEditModule={setShowEditModule} userId={userId} />
+                                                <DeleteCommentButton id={comment.fk_user_id} commentId={comment.id} setRatingUpdated={setRatingUpdated} userId={userId} />
                                             </div>
                                         </td>
                                     </tr>
@@ -249,37 +252,66 @@ function NoCommentsSection() {
     )
 }
 
-function RateModule({ setNewRating, postComment }) {
+function RateModule({ setNewRating, postComment, trainerId, setRatingUpdated }) {
+    const tokenData = useSelector(state => state && state.user)
+
+    const handleDelete = () => {
+        if (!tokenData) {
+            return
+        }
+
+        fetch(DEFAULT_BACKEND_PATH + 'trainers/' + trainerId + '/ratings', {
+            method: 'DELETE',
+            headers: {
+                'Authorization': tokenData.tokenType + ' ' + tokenData.accessToken,
+            },
+        })
+            .then(response => {
+                if (response.status == 204) {
+                    alert('Deleted!')
+                    setRatingUpdated((correntVal) => !correntVal)
+                    return
+                }
+                alert(response.status)
+            })
+            .catch(e => console.log(e))
+    }
+
     return (
-        <div class='d-flex justify-content-center'>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1" onClick={(e) => setNewRating(1)} />
-                <label class="form-check-label" for="inlineRadio1">1</label>
-            </div>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2" onClick={(e) => setNewRating(2)} />
-                <label class="form-check-label" for="inlineRadio2">2</label>
-            </div>
+        <>
+            <div class='d-flex justify-content-center'>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1" onClick={(e) => setNewRating(1)} />
+                    <label class="form-check-label" for="inlineRadio1">1</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2" onClick={(e) => setNewRating(2)} />
+                    <label class="form-check-label" for="inlineRadio2">2</label>
+                </div>
 
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2" onClick={(e) => setNewRating(3)} />
-                <label class="form-check-label" for="inlineRadio2">3</label>
-            </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2" onClick={(e) => setNewRating(3)} />
+                    <label class="form-check-label" for="inlineRadio2">3</label>
+                </div>
 
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2" onClick={(e) => setNewRating(4)} />
-                <label class="form-check-label" for="inlineRadio2">4</label>
-            </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2" onClick={(e) => setNewRating(4)} />
+                    <label class="form-check-label" for="inlineRadio2">4</label>
+                </div>
 
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2" onClick={(e) => setNewRating(5)} />
-                <label class="form-check-label" for="inlineRadio2">5</label>
-            </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2" onClick={(e) => setNewRating(5)} />
+                    <label class="form-check-label" for="inlineRadio2">5</label>
+                </div>
 
-            <div class="form-check form-check-inline">
-                <button type="button" class="btn btn-secondary" onClick={() => postComment()}>Rate!</button>
+                <div class="form-check form-check-inline">
+                    <button type="button" class="btn btn-secondary" onClick={() => postComment()}>Rate!</button>
+                </div>
             </div>
-        </div>
+            {!!trainerId && <div class='d-flex justify-content-center'>
+                <button type="button" class="btn btn-danger" onClick={() => handleDelete()}>Delete My Rating</button>
+            </div>}
+        </>
     )
 }
 
@@ -323,7 +355,7 @@ function EditCommentModule({ commentId, setShowEditModule, setRatingUpdated }) {
                 'comment': updatedComment
             })
         })
-            .then(response =>{
+            .then(response => {
                 if (response.status == 200) {
                     alert('Updated!')
                     setShowEditModule(null)
