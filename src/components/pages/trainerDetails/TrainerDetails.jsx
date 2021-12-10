@@ -109,6 +109,7 @@ function TrainerDetails() {
         fetch(DEFAULT_BACKEND_PATH + 'trainers/' + trainerId)
             .then(response => response.json())
             .then(trainerData => {
+                trainerData.ratingAverage = 0
                 setTrainer(trainerData)
             })
             .catch(e => console.log(e))
@@ -135,7 +136,7 @@ function TrainerDetails() {
             .catch(e => console.log(e))
     }, [ratingUpdated])
 
-    if (ratingAverage) {
+    if (ratingAverage && trainer) {
         trainer.ratingAverage = ratingAverage
     }
 
