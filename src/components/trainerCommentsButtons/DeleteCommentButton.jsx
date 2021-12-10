@@ -54,10 +54,9 @@ function DeleteCommentButton({ id, commentId, setRatingUpdated }) {
     }
 
     return (
-        <div>
-            <button type="button" class="btn btn-warning push-button-left">Edit</button>
+        <>
             <button type="button" class="btn btn-danger push-button-left" onClick={() => handleDelete()}>Delete</button>
-        </div>
+        </>
     )
 }
 

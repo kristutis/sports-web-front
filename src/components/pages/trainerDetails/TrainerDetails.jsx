@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux'
 import { DEFAULT_BACKEND_PATH } from '../../../App';
 import DeleteCommentButton from '../../trainerCommentsButtons/DeleteCommentButton';
 import './TrainerDetails.css'
+import EditCommentButton from '../../trainerCommentsButtons/EditCommentButton';
 
 function TrainerDetails() {
     const params = useParams();
@@ -19,6 +20,7 @@ function TrainerDetails() {
     const [ratings, setRatings] = useState(null)
     const [ratingAverage, setratingAverage] = useState(null)
     const [comments, setComments] = useState(null)
+    const [showEditModule, setShowEditModule] = useState(null)
 
     const handleNewComment = () => {
         if (!newComment) {
@@ -116,9 +118,11 @@ function TrainerDetails() {
             <br></br>
             {isLoggedIn && <RateModule setNewRating={setNewRating} postComment={postComment} />}
             <br></br>
-            {!!comments && !!comments.length ? <CommentsTable props={comments} setRatingUpdated={setRatingUpdated} /> : <NoCommentsSection />}
+            {!!comments && !!comments.length ? <CommentsTable props={comments} setRatingUpdated={setRatingUpdated} setShowEditModule={setShowEditModule} /> : <NoCommentsSection />}
             <br></br>
-            {isLoggedIn && <NewCommentModule setNewComment={setNewComment} handleNewComment={handleNewComment} commentAreaValue={newComment}/>}
+            {isLoggedIn && <NewCommentModule setNewComment={setNewComment} handleNewComment={handleNewComment} commentAreaValue={newComment} />}
+            <br></br>
+            {!!showEditModule && <EditCommentModule commentId={showEditModule} setShowEditModule={setShowEditModule} setRatingUpdated={setRatingUpdated}/>}
         </>
     )
 }
@@ -167,7 +171,7 @@ function TrainerInfo({ props }) {
     )
 }
 
-function CommentsTable({ props, setRatingUpdated }) {
+function CommentsTable({ props, setRatingUpdated, setShowEditModule }) {
     return (
         <div class="row justify-content-center no-gutters">
             <div class="col-auto">
@@ -192,7 +196,10 @@ function CommentsTable({ props, setRatingUpdated }) {
                                         <td>{date}</td>
                                         <td className='flex-comments'>
                                             {comment.comment}
-                                            <DeleteCommentButton id={comment.fk_user_id} commentId={comment.id} setRatingUpdated={setRatingUpdated}/>
+                                            <div>
+                                                <EditCommentButton creatorId={comment.fk_user_id} commentId={comment.id} setShowEditModule={setShowEditModule} />
+                                                <DeleteCommentButton id={comment.fk_user_id} commentId={comment.id} setRatingUpdated={setRatingUpdated} />
+                                            </div>
                                         </td>
                                     </tr>
                                 </>
@@ -262,6 +269,57 @@ function NewCommentModule({ setNewComment, handleNewComment, commentAreaValue })
                 <div class="form-check form-check-inline">
                     <textarea class="form-control" id="exampleFormControlTextarea1" rows="4" value={commentAreaValue} onChange={(e) => setNewComment(e.target.value)}></textarea>
                     <button type="button" class="btn btn-secondary" onClick={() => handleNewComment()}>Post Comment!</button>
+                </div>
+            </div>
+        </>
+    )
+}
+
+function EditCommentModule({ commentId, setShowEditModule, setRatingUpdated }) {
+    const tokenData = useSelector(state => state && state.user)
+    const [updatedComment, setUpdatedComment] = useState('')
+
+    const handleEditComment = () => {
+        if (!tokenData) {
+            alert('Unauthorized')
+            return
+        }
+        if (!updatedComment) {
+            alert('Comment cannot be empty!')
+            return
+        }
+
+        fetch(DEFAULT_BACKEND_PATH + 'trainers/comments/' + commentId, {
+            method: 'PUT',
+            headers: {
+                'Authorization': tokenData.tokenType + ' ' + tokenData.accessToken,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                'comment': updatedComment
+            })
+        })
+            .then(response =>{
+                if (response.status == 200) {
+                    alert('Updated!')
+                    setShowEditModule(null)
+                    setRatingUpdated((currentValue) => !currentValue)
+                    return
+                }
+                alert(response.status)
+            })
+            .catch(e => console.log(e))
+    }
+
+    return (
+        <>
+            <h3 class='d-flex justify-content-center'>
+                EDIT COMMENT
+            </h3>
+            <div class='d-flex justify-content-center'>
+                <div class="form-check form-check-inline">
+                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="4" placeholder='Write new comment here...' onChange={(e) => setUpdatedComment(e.target.value)}></textarea>
+                    <button type="button" class="btn btn-secondary" onClick={() => handleEditComment()}>EDIT!</button>
                 </div>
             </div>
         </>
