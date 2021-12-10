@@ -21,6 +21,30 @@ function TrainerDetails() {
     const [ratingAverage, setratingAverage] = useState(null)
     const [comments, setComments] = useState(null)
     const [showEditModule, setShowEditModule] = useState(null)
+    const [userId, setUserId] = useState(null)
+
+    useEffect(() => {
+        if (!tokenData) {
+            return
+        }
+
+        fetch(DEFAULT_BACKEND_PATH + 'users/details', {
+            method: 'GET',
+            headers: {
+                'Authorization': tokenData.tokenType + ' ' + tokenData.accessToken,
+            },
+        })
+            .then(response => {
+                if (response.status == 200) {
+                    return response.json()
+                }
+                alert(response.status)
+            })
+            .then(userData => {
+                setUserId(userData.id)
+            })
+            .catch(e => console.log(e))
+    }, [])
 
     const handleNewComment = () => {
         if (!newComment) {
@@ -118,7 +142,7 @@ function TrainerDetails() {
             <br></br>
             {isLoggedIn && <RateModule setNewRating={setNewRating} postComment={postComment} />}
             <br></br>
-            {!!comments && !!comments.length ? <CommentsTable props={comments} setRatingUpdated={setRatingUpdated} setShowEditModule={setShowEditModule} /> : <NoCommentsSection />}
+            {!!comments && !!comments.length ? <CommentsTable props={comments} setRatingUpdated={setRatingUpdated} setShowEditModule={setShowEditModule} userId={userId}/> : <NoCommentsSection />}
             <br></br>
             {isLoggedIn && <NewCommentModule setNewComment={setNewComment} handleNewComment={handleNewComment} commentAreaValue={newComment} />}
             <br></br>
@@ -171,7 +195,7 @@ function TrainerInfo({ props }) {
     )
 }
 
-function CommentsTable({ props, setRatingUpdated, setShowEditModule }) {
+function CommentsTable({ props, setRatingUpdated, setShowEditModule, userId }) {
     return (
         <div class="row justify-content-center no-gutters">
             <div class="col-auto">
@@ -197,8 +221,8 @@ function CommentsTable({ props, setRatingUpdated, setShowEditModule }) {
                                         <td className='flex-comments'>
                                             {comment.comment}
                                             <div>
-                                                <EditCommentButton creatorId={comment.fk_user_id} commentId={comment.id} setShowEditModule={setShowEditModule} />
-                                                <DeleteCommentButton id={comment.fk_user_id} commentId={comment.id} setRatingUpdated={setRatingUpdated} />
+                                                <EditCommentButton creatorId={comment.fk_user_id} commentId={comment.id} setShowEditModule={setShowEditModule} userId={userId}/>
+                                                <DeleteCommentButton id={comment.fk_user_id} commentId={comment.id} setRatingUpdated={setRatingUpdated} userId={userId}/>
                                             </div>
                                         </td>
                                     </tr>
