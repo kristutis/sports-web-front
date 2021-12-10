@@ -15,7 +15,7 @@ import EditTrainers from './components/pages/editTrainers/EditTrainers';
 import EditTrainer from './components/pages/editTrainer/EditTrainer';
 import CreateTrainer from './components/pages/createTrainer/CreateTrainer';
 
-export const DEFAULT_BACKEND_PATH = 'http://localhost:3000/api/'
+export const DEFAULT_BACKEND_PATH = 'https://cosmic-quarter-326513.appspot.com/api/'
 
 function App() {
   return (
