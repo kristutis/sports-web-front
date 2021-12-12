@@ -115,7 +115,7 @@ function EditTrainer(props) {
                         <thead class="thead">
                             <tr>
                                 <th colspan="2">
-                                    <h4 class="text-center font-weight-bold">Add New Trainer</h4>
+                                    <h4 class="text-center font-weight-bold">Edit Trainer</h4>
                                 </th>
                             </tr>
                         </thead>
